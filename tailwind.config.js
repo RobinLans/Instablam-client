@@ -2,10 +2,22 @@ module.exports = {
   purge: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#FF1D89",
+      },
+      fontFamily: {
+        body: ["Nunito"],
+      },
+    },
   },
   variants: {
-    extend: {},
+    extend: {
+      textColor: ["active"],
+      borderColor: ["active"],
+    },
   },
   plugins: [],
-}
+};
+
+//FF1D89
