@@ -25,9 +25,9 @@ function App() {
   ];
 
   useEffect(() => {
-    const imagesInLS = localStorage.getItem("imgs");
+    const imagesInLS = JSON.parse(localStorage.getItem("imgs"));
 
-    if (!imagesInLS) {
+    if (!imagesInLS || imagesInLS.length === 0) {
       localStorage.setItem("imgs", JSON.stringify(imageGallery));
     }
   }, []);

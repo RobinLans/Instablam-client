@@ -11,6 +11,7 @@ const videoConstraints = {
 function Camera() {
   const webcamRef = useRef(null);
   const [imageSource, setImageSource] = useState(null);
+  const [currentAddress, setCurrentAddress] = useState({});
   let navigate = useNavigate();
   const currentDate = new Date();
 
@@ -27,10 +28,7 @@ function Camera() {
     if (imageSource) {
       const imgObj = {
         src: imageSource,
-        place: {
-          city: "Göteborg",
-          country: "Sweden",
-        },
+        place: currentAddress,
         date: `${currentDate.getDate()}-${currentDate.getMonth()}-${currentDate.getFullYear()}`,
       };
 
@@ -40,6 +38,46 @@ function Camera() {
       localStorage.setItem("imgs", JSON.stringify(newImgArr));
     }
   }, [imageSource]);
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(onSuccess, (error) => {
+        setCurrentAddress({
+          error: error.message,
+        });
+      });
+    } else {
+      console.log("No location");
+    }
+  }, []);
+
+  async function onSuccess(pos) {
+    const address = await getAddress(pos.coords.latitude, pos.coords.longitude);
+
+    if (address) {
+      setCurrentAddress({
+        country: address.country,
+        city: address.city,
+      });
+    }
+  }
+
+  async function getAddress(lat, long) {
+    try {
+      const response = await fetch(
+        `https://geocode.xyz/${lat},${long}?geoit=json&auth=216031875532726209583x64218`
+      );
+      const data = await response.json();
+
+      if (data.error) {
+        console.log("Cannot get position");
+      }
+      return data;
+    } catch (error) {
+      console.log("Cannot get position");
+      return null;
+    }
+  }
 
   return (
     <>

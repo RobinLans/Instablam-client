@@ -4,6 +4,8 @@ import { BsFillTrashFill } from "react-icons/bs";
 function ImageCard({ img, index, removeImage }) {
   const [btnHover, setButtonHover] = useState(false);
 
+  console.log(img);
+
   return (
     <section className="imgCard ">
       <img
@@ -13,8 +15,14 @@ function ImageCard({ img, index, removeImage }) {
       />
       <article className="imgCardInfo">
         <div>
-          <p>{img.place.country}</p>
-          <p>{img.place.city}</p>
+          {!img.place.error ? (
+            <>
+              <p>{img.place.country}</p>
+              <p>{img.place.city}</p>
+            </>
+          ) : (
+            <p>{img.place.error}</p>
+          )}
         </div>
         <p className="text-sm m-0 opacity-70">{img.date}</p>
       </article>
